@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] float loadDelay = 0.5f;
     [SerializeField] int progressScorePerSecond = 10;
-    [SerializeField] int trickBaseScore = 500;
+    [SerializeField] int trickBaseScore = 300;
     [SerializeField] float comboTimeWindow = 5f;
     [SerializeField] int maxSkillChained = 5;
     
@@ -74,13 +74,13 @@ public class GameManager : MonoBehaviour
     }
     
     // Add score with a text indicator
-    public void AddScoreWithIndicator(int amount, string indicatorText, Vector3 position)
+    public void AddScoreWithIndicator(int amount, string indicatorText)
     {
         AddScore(amount);
         UIDisplay display = FindFirstObjectByType<UIDisplay>();
         if (display != null)
         {
-            display.ShowScoreIndicator(amount, indicatorText, position);
+            display.ShowScoreIndicator(amount, indicatorText);
         }
     }
     
@@ -94,12 +94,8 @@ public class GameManager : MonoBehaviour
         string indicatorText = comboCounter > 1 ? 
             $"360° Trick x{multiplier}" : 
             "360° Trick";
-            
-        // Get player position for the indicator
-        PlayerController player = FindFirstObjectByType<PlayerController>();
-        Vector3 position = player != null ? player.transform.position : Vector3.zero;
         
-        AddScoreWithIndicator(trickScore, indicatorText, position);
+        AddScoreWithIndicator(trickScore, indicatorText);
         
         lastTrickTime = Time.time;
     }

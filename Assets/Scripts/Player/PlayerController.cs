@@ -11,8 +11,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float boostSpeed = 30f;
     [SerializeField] float baseSpeed = 20f;
     [SerializeField] float jumpSpeed = 30f;
+    [SerializeField] float jumpBoost = 10f;
     [SerializeField] ParticleSystem crashEffect;
     [SerializeField] ParticleSystem trickParticles;
+    [SerializeField] ParticleSystem snowParticles;
     
     Vector2 moveInput;
     Rigidbody2D rb2d;
@@ -115,11 +117,13 @@ public class PlayerController : MonoBehaviour
     // Get input value and store in jumpInput
     void OnJump(InputValue value)
     {   
+        myAnimator.SetBool(isJumping, value.isPressed);
+        
         // Check if the player is standing on the ground
         if (IsGroundTouching() && value.isPressed)
         {
             // Jump physics
-            myRigidBody.linearVelocity += new Vector2(0f, jumpSpeed);
+            myRigidBody.linearVelocity += new Vector2(jumpBoost, jumpSpeed);
         }
     }
 
@@ -173,13 +177,13 @@ public class PlayerController : MonoBehaviour
     {
         if (IsGroundTouching())
         {
-            myAnimator.SetBool(isJumping, false);
             audioPlayer.StartSnowboardingSound();
+            snowParticles.Play();
         }
         else
         {
-            myAnimator.SetBool(isJumping, true);
             audioPlayer.StopSnowboardingSound();
+            snowParticles.Stop();
         }
     }
 }

@@ -1,11 +1,15 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Obstacle : MonoBehaviour
 {
+    [SerializeField] int bounceScore = 100;
+    
     CapsuleCollider2D bodyCollider;
     BoxCollider2D topCollider;
     AudioPlayer audioPlayer;
+    GameManager gameManager;
     
     // Start is called before the first frame update
     void Start()
@@ -13,9 +17,10 @@ public class Obstacle : MonoBehaviour
         bodyCollider = GetComponent<CapsuleCollider2D>();
         topCollider = GetComponent<BoxCollider2D>();
         audioPlayer = FindFirstObjectByType<AudioPlayer>();
+        gameManager = FindFirstObjectByType<GameManager>();
     }
 
-    void Update()
+    private void OnCollisionEnter2D(Collision2D other)
     {
         bool isTouchingBody = bodyCollider.IsTouchingLayers(LayerMask.GetMask("Player"));
         bool isTouchingTop = topCollider.IsTouchingLayers(LayerMask.GetMask("Player"));
@@ -24,16 +29,23 @@ public class Obstacle : MonoBehaviour
         {
             var player = FindFirstObjectByType<PlayerController>();
             player.Crash();
-            Invoke("ReloadScene", 2);
+            gameManager.ResetScore();
+            gameManager.ProcessPlayerCrash();
         }
         else if (isTouchingTop)
         {
-            audioPlayer.PlayBoostClip();   
+            // If the player board collide on top of
+            // the obstacle then bounce and add points
+            audioPlayer.PlayBoostClip();
+            BounceOnObstacle();
         }
     }
     
-    void ReloadScene()
+    // Handle bounce on obstacle
+    private void BounceOnObstacle()
     {
-        SceneManager.LoadScene(0);
+        string indicatorText = "Bounce on Rock";
+        
+        gameManager.AddScoreWithIndicator(bounceScore, indicatorText);
     }
 }

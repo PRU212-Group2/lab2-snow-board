@@ -37,7 +37,7 @@ public class UIDisplay : MonoBehaviour
         scoreText.text = scoreManager.GetScore().ToString("00000");
     }
     
-    public void ShowScoreIndicator(int score, string text, Vector3 worldPosition)
+    public void ShowScoreIndicator(int score, string text)
     {
         if (scoreIndicatorPrefab == null || scoreIndicatorParent == null)
             return;
