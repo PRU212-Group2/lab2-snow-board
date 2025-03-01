@@ -12,15 +12,22 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float baseSpeed = 20f;
     [SerializeField] float jumpSpeed = 30f;
     [SerializeField] ParticleSystem crashEffect;
-    [SerializeField] AudioClip crashSFX;
-
+    [SerializeField] ParticleSystem trickParticles;
+    
     Vector2 moveInput;
     Rigidbody2D rb2d;
     Animator myAnimator;
     Rigidbody2D myRigidBody;
     CapsuleCollider2D myBoardCollider;
     GameManager gameManager;
+    AudioPlayer audioPlayer;
     bool canMove = true;
+    
+    // Rotation tracking
+    private float totalRotation = 0f;
+    private float previousRotation = 0f;
+    private bool isTrackingTrick = false;
+    private bool isTrickCompleted = false;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +37,10 @@ public class PlayerController : MonoBehaviour
         myRigidBody = GetComponent<Rigidbody2D>();
         myBoardCollider = GetComponent<CapsuleCollider2D>();
         gameManager = FindFirstObjectByType<GameManager>();
+        audioPlayer = FindFirstObjectByType<AudioPlayer>();
+        
+        // Initialize rotation value
+        previousRotation = transform.eulerAngles.z;
     }
 
     // Update is called once per frame
@@ -39,7 +50,65 @@ public class PlayerController : MonoBehaviour
         {
             RotatePlayer();
             Skating();
-            Falling();
+            TrackRotation();
+        }
+    }
+    
+    void TrackRotation()
+    {
+        // Only track rotation when in the air
+        if (!IsGroundTouching())
+        {
+            if (!isTrackingTrick)
+            {
+                // Start tracking a new trick
+                isTrackingTrick = true;
+                totalRotation = 0f;
+                isTrickCompleted = false;
+            }
+            
+            // Calculate the rotation change since last frame
+            float currentRotation = transform.eulerAngles.z;
+            float deltaRotation = Mathf.DeltaAngle(previousRotation, currentRotation);
+            
+            // Add to total rotation
+            totalRotation += deltaRotation;
+            
+            // Check if we've completed a 360 (or multiple 360s)
+            if (!isTrickCompleted && Mathf.Abs(totalRotation) >= 360f)
+            {
+                // We completed at least one full rotation
+                CompleteRotationTrick();
+                isTrickCompleted = true;
+            }
+            
+            // Save current rotation for next frame
+            previousRotation = currentRotation;
+        }
+        else if (isTrackingTrick)
+        {
+            // We've landed, stop tracking trick
+            isTrackingTrick = false;
+            totalRotation = 0f;
+        }
+    }
+    
+    void CompleteRotationTrick()
+    {
+        // How many full 360s did we complete
+        int fullRotations = Mathf.FloorToInt(Mathf.Abs(totalRotation) / 360f);
+        
+        if (fullRotations > 0)
+        {
+            // Play trick effect
+            if (trickParticles != null)
+            {
+                trickParticles.Play();
+                audioPlayer.PlayBoostClip();
+            }
+            
+            // Add score through GameManager
+            gameManager.CompleteTrick();
         }
     }
     
@@ -69,7 +138,7 @@ public class PlayerController : MonoBehaviour
 
         // Play effects and animations
         crashEffect.Play();
-        GetComponent<AudioSource>().PlayOneShot(crashSFX);
+        audioPlayer.PlayCrashClip();
         myAnimator.SetTrigger(dyingTrigger);
 
         // Freeze position and rotation
@@ -103,12 +172,14 @@ public class PlayerController : MonoBehaviour
     void Skating()
     {
         if (IsGroundTouching())
-            myAnimator.SetBool( isJumping, false);
-    }
-    
-    void Falling()
-    {
-        if (!IsGroundTouching())
-            myAnimator.SetBool( isJumping, true);
+        {
+            myAnimator.SetBool(isJumping, false);
+            audioPlayer.StartSnowboardingSound();
+        }
+        else
+        {
+            myAnimator.SetBool(isJumping, true);
+            audioPlayer.StopSnowboardingSound();
+        }
     }
 }
