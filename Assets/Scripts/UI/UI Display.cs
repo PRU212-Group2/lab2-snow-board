@@ -10,13 +10,16 @@ public class UIDisplay : MonoBehaviour
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] GameObject scoreIndicatorPrefab;
     [SerializeField] RectTransform scoreIndicatorParent;
-    [SerializeField] Vector2 screenOffset = new Vector2(0, 50);
-    
-    ScoreManager scoreManager;
+    [SerializeField] TextMeshProUGUI timeleftPrefab;
+
+    private ScoreManager scoreManager;
+    private GameManager gameManager;
+    private bool isTimeTrialMode = false;
 
     void Awake()
     {
         scoreManager = FindFirstObjectByType<ScoreManager>();
+        gameManager = FindFirstObjectByType<GameManager>();
         
         // Create parent for indicators if not assigned
         if (scoreIndicatorParent == null)
@@ -31,10 +34,24 @@ public class UIDisplay : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        CheckGameMode();
+    }
+    
     void Update()
     {
         // Update score text on the UI
-        scoreText.text = scoreManager.GetScore().ToString("00000");
+        if (scoreText != null && scoreManager != null)
+        {
+            scoreText.text = scoreManager.GetScore().ToString("00000");
+        }
+        
+        // Only Update time if in time trial mode
+        if (isTimeTrialMode)
+        {
+            timeleftPrefab.text = gameManager.GetTime().ToString("00.0");
+        }
     }
     
     public void ShowScoreIndicator(int score, string text)
@@ -45,14 +62,22 @@ public class UIDisplay : MonoBehaviour
         // Simply instantiate the indicator as a child of the existing parent
         GameObject indicator = Instantiate(scoreIndicatorPrefab, scoreIndicatorParent);
     
-        // You can position it relative to the player's screen position if needed
-        // If you want it at a fixed position, you can set it directly
-    
         // Initialize the score indicator with the appropriate text
         ScoreIndicator scoreIndicator = indicator.GetComponent<ScoreIndicator>();
         if (scoreIndicator != null)
         {
             scoreIndicator.Initialize(score, text);
         }
+    }
+    
+    private void CheckGameMode()
+    {
+        if (timeleftPrefab == null)
+            return;
+        
+        isTimeTrialMode = gameManager.GetGameMode().Equals("Time Trial");
+        
+        // Enable or disable the timer based on game mode
+        timeleftPrefab.gameObject.SetActive(isTimeTrialMode);
     }
 }

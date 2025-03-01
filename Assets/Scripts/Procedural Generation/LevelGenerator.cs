@@ -6,10 +6,13 @@ public class LevelGenerator : MonoBehaviour
     [Header("References")]
     [SerializeField] GameObject[] chunkPrefabs;
     [SerializeField] Transform chunkParent;
+    [SerializeField] GameObject checkpointChunkPrefab;
+
     
     [Header("Level Settings")]
     [Tooltip("The amount of chunks that will be generated at the start")]
     [SerializeField] int chunkAmount = 2;
+    [SerializeField] int checkpointChunkInterval = 8;
     [Tooltip("Do not change chunk length unless chunk size reflects changes")]
     [SerializeField] float chunkLength = 200;
     [SerializeField] float moveSpeed = 8f;
@@ -17,9 +20,12 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] float maxMoveSpeed = 15f;
     
     List<Chunk> chunks = new List<Chunk>();
-    
+    int chunkSpawned = 0;
+    GameManager gameManager;
+
     void Start()
     {
+        gameManager = FindFirstObjectByType<GameManager>();
         SpawnStartingChunks();
     }
 
@@ -48,11 +54,24 @@ public class LevelGenerator : MonoBehaviour
             
         chunks.Add(newChunk);
         newChunk.Init(this);
+        
+        chunkSpawned++;
     }
 
     private GameObject ChooseChunk()
     {
-        var chunkPrefab = chunkPrefabs[Random.Range(0, chunkPrefabs.Length)];
+        GameObject chunkPrefab;
+
+        if (gameManager.GetGameMode().Equals("Time Trial") 
+            && chunkSpawned % checkpointChunkInterval == 0 
+            && chunkSpawned != 0)
+        {
+            chunkPrefab = checkpointChunkPrefab;
+        }
+        else
+        {
+            chunkPrefab = chunkPrefabs[Random.Range(0, chunkPrefabs.Length)];
+        }
 
         return chunkPrefab;
     }
