@@ -12,11 +12,11 @@ public class UIDisplay : MonoBehaviour
     [SerializeField] RectTransform scoreIndicatorParent;
     [SerializeField] Vector2 screenOffset = new Vector2(0, 50);
     
-    GameManager scoreManager;
+    ScoreManager scoreManager;
 
     void Awake()
     {
-        scoreManager = FindFirstObjectByType<GameManager>();
+        scoreManager = FindFirstObjectByType<ScoreManager>();
         
         // Create parent for indicators if not assigned
         if (scoreIndicatorParent == null)

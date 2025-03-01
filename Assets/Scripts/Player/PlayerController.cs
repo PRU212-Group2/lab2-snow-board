@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D myRigidBody;
     CapsuleCollider2D myBoardCollider;
     GameManager gameManager;
+    ScoreManager scoreManager;
     AudioPlayer audioPlayer;
     bool canMove = true;
     
@@ -39,6 +40,7 @@ public class PlayerController : MonoBehaviour
         myRigidBody = GetComponent<Rigidbody2D>();
         myBoardCollider = GetComponent<CapsuleCollider2D>();
         gameManager = FindFirstObjectByType<GameManager>();
+        scoreManager = FindFirstObjectByType<ScoreManager>();
         audioPlayer = FindFirstObjectByType<AudioPlayer>();
         
         // Initialize rotation value
@@ -110,7 +112,7 @@ public class PlayerController : MonoBehaviour
             }
             
             // Add score through GameManager
-            gameManager.CompleteTrick();
+            scoreManager.CompleteTrick();
         }
     }
     

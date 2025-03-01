@@ -9,6 +9,7 @@ public class Obstacle : MonoBehaviour
     CapsuleCollider2D bodyCollider;
     BoxCollider2D topCollider;
     AudioPlayer audioPlayer;
+    ScoreManager scoreManager;
     GameManager gameManager;
     
     // Start is called before the first frame update
@@ -17,6 +18,7 @@ public class Obstacle : MonoBehaviour
         bodyCollider = GetComponent<CapsuleCollider2D>();
         topCollider = GetComponent<BoxCollider2D>();
         audioPlayer = FindFirstObjectByType<AudioPlayer>();
+        scoreManager = FindFirstObjectByType<ScoreManager>();
         gameManager = FindFirstObjectByType<GameManager>();
     }
 
@@ -29,7 +31,6 @@ public class Obstacle : MonoBehaviour
         {
             var player = FindFirstObjectByType<PlayerController>();
             player.Crash();
-            gameManager.ResetScore();
             gameManager.ProcessPlayerCrash();
         }
         else if (isTouchingTop)
@@ -46,6 +47,6 @@ public class Obstacle : MonoBehaviour
     {
         string indicatorText = "Bounce on Rock";
         
-        gameManager.AddScoreWithIndicator(bounceScore, indicatorText);
+        scoreManager.AddScoreWithIndicator(bounceScore, indicatorText);
     }
 }
