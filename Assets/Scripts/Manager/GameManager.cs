@@ -6,16 +6,55 @@ using System.IO;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] float loadDelay = 0.5f;
-    
-    private string saveFilePath;
+    [SerializeField] float startTime = 60f;
+    [SerializeField] string gameMode = "Normal";
     
     ScoreManager scoreManager;
+    private float timeLeft;
     static GameManager _instance;
+    
+    void Start()
+    {
+        timeLeft = startTime;
+    }
     
     void Awake()
     {
         ManageSingleton();
         scoreManager = FindFirstObjectByType<ScoreManager>();
+    }
+    
+    void Update()
+    {
+        if (gameMode.Equals("Time Trial"))
+        {
+            DecreaseTime();
+        }
+    }
+    
+    public void IncreaseTime(float amount)
+    {
+        timeLeft += amount;
+    }
+
+    void DecreaseTime()
+    {
+        timeLeft -= Time.deltaTime;
+
+        if (timeLeft <= 0f)
+        {
+            Invoke("ResetGame", loadDelay);
+        }
+    }
+
+    public float GetTime()
+    {
+        return timeLeft;
+    }
+
+    public string GetGameMode()
+    {
+        return gameMode;
     }
     
     // Applying singleton pattern
@@ -42,6 +81,7 @@ public class GameManager : MonoBehaviour
     // Reset game session to the first level
     void ResetGame()
     {
+        timeLeft = startTime;
         scoreManager.ResetScore();
         SceneManager.LoadScene(0);
     }
