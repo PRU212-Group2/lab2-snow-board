@@ -1072,7 +1072,7 @@ SurfaceEffector2D:
   m_ForceScale: 1
   m_UseContactForce: 0
   m_UseFriction: 1
-  m_UseBounce: 1
+  m_UseBounce: 0
 --- !u!114 &8179542027224071578
 MonoBehaviour:
   m_ObjectHideFlags: 0
