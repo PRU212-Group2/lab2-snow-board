@@ -5,17 +5,21 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     static readonly int isJumping = Animator.StringToHash("isJumping");
+    private static readonly int dyingTrigger = Animator.StringToHash("crashingTrigger");
     
     [SerializeField] float torqueAmount = 1f;
     [SerializeField] float boostSpeed = 30f;
     [SerializeField] float baseSpeed = 20f;
     [SerializeField] float jumpSpeed = 30f;
+    [SerializeField] ParticleSystem crashEffect;
+    [SerializeField] AudioClip crashSFX;
 
     Vector2 moveInput;
     Rigidbody2D rb2d;
     Animator myAnimator;
     Rigidbody2D myRigidBody;
     CapsuleCollider2D myBoardCollider;
+    GameManager gameManager;
     bool canMove = true;
 
     // Start is called before the first frame update
@@ -25,6 +29,7 @@ public class PlayerController : MonoBehaviour
         myAnimator = GetComponent<Animator>();
         myRigidBody = GetComponent<Rigidbody2D>();
         myBoardCollider = GetComponent<CapsuleCollider2D>();
+        gameManager = FindFirstObjectByType<GameManager>();
     }
 
     // Update is called once per frame
@@ -48,11 +53,29 @@ public class PlayerController : MonoBehaviour
             myRigidBody.linearVelocity += new Vector2(0f, jumpSpeed);
         }
     }
+
+    // If the player head is touching the ground then activate Crash
+    void OnTriggerEnter2D(Collider2D other) 
+    {
+        if(other.CompareTag("Ground"))
+        {
+            Crash();
+        }    
+    }
     
-    public void DisableControls()
+    public void Crash()
     {
         if (!canMove) return;
+
+        // Play effects and animations
+        crashEffect.Play();
+        GetComponent<AudioSource>().PlayOneShot(crashSFX);
+        myAnimator.SetTrigger(dyingTrigger);
+
+        // Freeze position and rotation
+        myRigidBody.constraints = RigidbodyConstraints2D.FreezeAll;
         canMove = false;
+        gameManager.ProcessPlayerCrash();
     }
 
     void OnMove(InputValue value)

@@ -19,8 +19,13 @@ public class Obstacle : MonoBehaviour
         if (isTouchingBody)
         {
             var player = FindFirstObjectByType<PlayerController>();
-            player.DisableControls();
-            SceneManager.LoadScene(0);
+            player.Crash();
+            Invoke("ReloadScene", 2);
         }
+    }
+    
+    void ReloadScene()
+    {
+        SceneManager.LoadScene(0);
     }
 }
