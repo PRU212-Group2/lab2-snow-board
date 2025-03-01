@@ -34,7 +34,7 @@ public class UIDisplay : MonoBehaviour
     void Update()
     {
         // Update score text on the UI
-        scoreText.text = scoreManager.GetScore().ToString("00000");
+        scoreText.text = scoreManager.GetHighScore().ToString("00000");
     }
     
     public void ShowScoreIndicator(int score, string text)
