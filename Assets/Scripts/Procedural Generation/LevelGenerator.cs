@@ -9,15 +9,12 @@ public class LevelGenerator : MonoBehaviour
     
     [Header("Level Settings")]
     [Tooltip("The amount of chunks that will be generated at the start")]
-    [SerializeField] int chunkAmount = 12;
+    [SerializeField] int chunkAmount = 2;
     [Tooltip("Do not change chunk length unless chunk size reflects changes")]
     [SerializeField] float chunkLength = 200;
     [SerializeField] float moveSpeed = 8f;
-    [SerializeField] float minMoveSpeed = 2f;
-    [SerializeField] float maxMoveSpeed = 20f;
     
     List<Chunk> chunks = new List<Chunk>();
-    int chunkSpawned = 0;
     
     void Start()
     {
@@ -49,8 +46,6 @@ public class LevelGenerator : MonoBehaviour
             
         chunks.Add(newChunk);
         newChunk.Init(this);
-        
-        chunkSpawned++;
     }
 
     private GameObject ChooseChunk()
