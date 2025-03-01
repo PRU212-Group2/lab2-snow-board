@@ -13,6 +13,8 @@ public class LevelGenerator : MonoBehaviour
     [Tooltip("Do not change chunk length unless chunk size reflects changes")]
     [SerializeField] float chunkLength = 200;
     [SerializeField] float moveSpeed = 8f;
+    [SerializeField] float minMoveSpeed = 2f;
+    [SerializeField] float maxMoveSpeed = 15f;
     
     List<Chunk> chunks = new List<Chunk>();
     
@@ -84,6 +86,18 @@ public class LevelGenerator : MonoBehaviour
                 Destroy(chunk.gameObject);
                 SpawnChunk();
             }
+        }
+    }
+    
+    // Change move speed to increase difficulty
+    public void ChangeChunkMoveSpeed(float speedAmount)
+    {
+        float newMoveSpeed = moveSpeed + speedAmount;
+        newMoveSpeed = Mathf.Clamp(newMoveSpeed, minMoveSpeed, maxMoveSpeed);
+        
+        if (!Mathf.Approximately(newMoveSpeed, moveSpeed))
+        {
+            moveSpeed = newMoveSpeed;
         }
     }
 }
