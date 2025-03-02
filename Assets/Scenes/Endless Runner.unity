@@ -835,6 +835,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Chunk Parent
       objectReference: {fileID: 0}
+    - target: {fileID: 6036495143150557769, guid: 44975fa10cef0ff4bbf673cf5330ccd1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
