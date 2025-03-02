@@ -33,6 +33,11 @@ public class GameManager : MonoBehaviour
             DecreaseTime();
         }
     }
+
+    public void SetGameMode(string mode)
+    {
+        gameMode = mode;
+    }
     
     public void IncreaseTime(float amount)
     {
@@ -81,7 +86,7 @@ public class GameManager : MonoBehaviour
     }
     
     // Reset game session to the first level
-    void ResetGame()
+    public void ResetGame()
     {
         timeLeft = startTime;
         dayNightManager.ResetDayNightCycle();
