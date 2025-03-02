@@ -55,6 +55,7 @@ public class PlayerController : MonoBehaviour
             RotatePlayer();
             Skating();
             TrackRotation();
+            SpeedUp();
         }
     }
 
@@ -136,29 +137,20 @@ public class PlayerController : MonoBehaviour
         {
             Crash();
         }
-        else if (other.CompareTag("Water")) // Detect water layer
-        {
-            Debug.Log("Collided with: " + other.gameObject.name);
-            IncreaseSpeed();
-        }
     }
 
-    void OnTriggerExit2D(Collider2D other)
+    void SpeedUp()
     {
-        if (other.CompareTag("Water")) // Reset speed when leaving water
+        if (myBoardCollider.IsTouchingLayers(LayerMask.GetMask("Water")))
         {
-            ResetSpeed();
+            // Debug.Log("Collided with: " + other.gameObject.name);
+            IncreaseSpeed();
         }
     }
 
     void IncreaseSpeed()
     {
-        rb2d.linearVelocity = new Vector2(rb2d.linearVelocity.x * 2f, rb2d.linearVelocity.y);
-    }
-
-    void ResetSpeed()
-    {
-        rb2d.linearVelocity = new Vector2(rb2d.linearVelocity.x / 2f, rb2d.linearVelocity.y);
+        rb2d.linearVelocity = new Vector2(rb2d.linearVelocity.x * 1.3f, rb2d.linearVelocity.y);
     }
 
     public void Crash()
