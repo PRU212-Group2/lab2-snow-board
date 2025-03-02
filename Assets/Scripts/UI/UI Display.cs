@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public class UIDisplay : MonoBehaviour
 {
     [Header("Score")]
+    [SerializeField] TextMeshProUGUI distanceText;
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] GameObject scoreIndicatorPrefab;
     [SerializeField] RectTransform scoreIndicatorParent;
@@ -44,13 +45,19 @@ public class UIDisplay : MonoBehaviour
         // Update score text on the UI
         if (scoreText != null && scoreManager != null)
         {
-            scoreText.text = scoreManager.GetScore().ToString("00000");
+            scoreText.text = scoreManager.GetScore().ToString("0000000");
+        }
+        
+        // Update score text on the UI
+        if (distanceText != null && scoreManager != null)
+        {
+            distanceText.text = scoreManager.GetDistanceTraveled().ToString("00000") + "m";
         }
         
         // Only Update time if in time trial mode
         if (isTimeTrialMode)
         {
-            timeleftPrefab.text = gameManager.GetTime().ToString("00.0");
+            timeleftPrefab.text = gameManager.GetTime().ToString("00.0") + "s";
         }
     }
     

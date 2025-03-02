@@ -2,17 +2,20 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine.Rendering.Universal;
 
 public class ScoreManager : MonoBehaviour
 {
-    [SerializeField] int progressScorePerSecond = 10;
+    [SerializeField] int progressMeterPerSecond = 10;
     [SerializeField] int trickBaseScore = 300;
     [SerializeField] float comboTimeWindow = 5f;
     [SerializeField] int maxSkillChained = 5;
     
-    private float lastScoreUpdateTime;
+    private float lastDistanceUpdateTime;
     private float lastTrickTime;
     private int comboCounter = 0;
+    private int distanceTraveled = 0;
+    private int furthestDistanceTraveled = 0;
     private int score;
     private int highScore;
     
@@ -30,25 +33,34 @@ public class ScoreManager : MonoBehaviour
     
     void Start()
     {
-        lastScoreUpdateTime = Time.time;
+        lastDistanceUpdateTime = Time.time;
     }
     
     void Update()
     {
-        // Add progressive score over time
-        if (Time.time - lastScoreUpdateTime >= 1f)
+        DistanceUpdate();
+        ComboTracker();
+    }
+
+    private void DistanceUpdate()
+    {
+        // Add progressive distance over time
+        if (Time.time - lastDistanceUpdateTime >= 1f)
         {
-            AddScore(progressScorePerSecond);
-            lastScoreUpdateTime = Time.time;
+            AddDistance(progressMeterPerSecond);
+            lastDistanceUpdateTime = Time.time;
         }
-        
+    }
+
+    private void ComboTracker()
+    {
         // Check if combo has expired
         if (comboCounter > 0 && Time.time - lastTrickTime > comboTimeWindow)
         {
             comboCounter = 0;
         }
     }
-    
+
     // Applying singleton pattern
     void ManageSingleton()
     {
@@ -62,6 +74,12 @@ public class ScoreManager : MonoBehaviour
             _instance = this;
             DontDestroyOnLoad(gameObject);
         }
+    }
+    
+    // Public method to retrieve distance
+    public int GetDistanceTraveled()
+    {
+        return distanceTraveled;
     }
     
     // Public method to retrieve score
@@ -89,6 +107,26 @@ public class ScoreManager : MonoBehaviour
         {
             highScore = score;
         }
+    }
+    
+    // Add distance traveled based on events
+    public void AddDistance(int meters)
+    {
+        distanceTraveled += meters;
+        
+        // Clamp the score to not be less than 0
+        distanceTraveled = Mathf.Clamp(distanceTraveled, 0, int.MaxValue);
+        
+        // Check if current score beats high score
+        if (distanceTraveled > furthestDistanceTraveled)
+        {
+            furthestDistanceTraveled = distanceTraveled;
+        }
+    }
+
+    public int GetFurthestDistanceTraveled()
+    {
+        return furthestDistanceTraveled;
     }
     
     // Add score with a text indicator
@@ -123,6 +161,8 @@ public class ScoreManager : MonoBehaviour
     {
         score = 0;
         comboCounter = 0;
+        distanceTraveled = 0;
+        SaveHighScore();
     }
     
     // Load high score from saved file
@@ -133,10 +173,12 @@ public class ScoreManager : MonoBehaviour
             string jsonData = File.ReadAllText(saveFilePath);
             SaveData data = JsonUtility.FromJson<SaveData>(jsonData);
             highScore = data.highScore;
+            furthestDistanceTraveled = data.furthestDistanceTraveled;
         }
         else
         {
             highScore = 0;
+            furthestDistanceTraveled = 0;
         }
     }
     
@@ -145,6 +187,7 @@ public class ScoreManager : MonoBehaviour
     {
         SaveData data = new SaveData();
         data.highScore = highScore;
+        data.furthestDistanceTraveled = furthestDistanceTraveled;
         
         string jsonData = JsonUtility.ToJson(data, true);
         File.WriteAllText(saveFilePath, jsonData);

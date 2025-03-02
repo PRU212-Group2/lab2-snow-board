@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &377535297539531053
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3743527742325197166}
+  - component: {fileID: 2881610662993989370}
+  m_Layer: 0
+  m_Name: Day_Night Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3743527742325197166
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377535297539531053}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -79.73453, y: 39.38287, z: -0.33713654}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2881610662993989370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377535297539531053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3c4f0b825620e945a4079a56a60778d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dayNightTransitionScore: 700
+  nightDayTransitionScore: 400
+  globalLight: {fileID: 0}
+  transitionDuration: 5
+  dayColor: {r: 1, g: 1, b: 1, a: 1}
+  nightColor: {r: 0.18039216, g: 0.1882353, b: 0.23921569, a: 1}
+  dayIntensity: 1
+  nightIntensity: 0.5
+  enableCyclicalDayNight: 1
+  sunPrefab: {fileID: 7708877954883414041, guid: 626707752be9e8240969ba1bfcb4f8c7, type: 3}
+  moonPrefab: {fileID: 9212060584549636638, guid: 7cd22ff8330846a4a88d599362232e4f, type: 3}
+  celestialParent: {fileID: 0}
+  celestialPosition: {x: 0.5, y: 0.3}
+  celestialTransitionSpeed: 2

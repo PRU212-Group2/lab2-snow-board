@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] string gameMode = "Normal";
     
     ScoreManager scoreManager;
+    DayNightManager dayNightManager;
     private float timeLeft;
     static GameManager _instance;
     
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
     {
         ManageSingleton();
         scoreManager = FindFirstObjectByType<ScoreManager>();
+        dayNightManager = FindFirstObjectByType<DayNightManager>();
     }
     
     void Update()
@@ -82,6 +84,7 @@ public class GameManager : MonoBehaviour
     void ResetGame()
     {
         timeLeft = startTime;
+        dayNightManager.ResetDayNightCycle();
         scoreManager.ResetScore();
         SceneManager.LoadScene(0);
     }
