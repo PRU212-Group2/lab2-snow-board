@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     static readonly int isJumping = Animator.StringToHash("isJumping");
     private static readonly int dyingTrigger = Animator.StringToHash("crashingTrigger");
-    
+
     [SerializeField] float torqueAmount = 1f;
     [SerializeField] float boostSpeed = 30f;
     [SerializeField] float baseSpeed = 20f;
@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] ParticleSystem crashEffect;
     [SerializeField] ParticleSystem trickParticles;
     [SerializeField] ParticleSystem snowParticles;
-    
+
     Vector2 moveInput;
     Rigidbody2D rb2d;
     Animator myAnimator;
@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     ScoreManager scoreManager;
     AudioPlayer audioPlayer;
     bool canMove = true;
-    
+
     // Rotation tracking
     private float totalRotation = 0f;
     private float previousRotation = 0f;
@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
         gameManager = FindFirstObjectByType<GameManager>();
         scoreManager = FindFirstObjectByType<ScoreManager>();
         audioPlayer = FindFirstObjectByType<AudioPlayer>();
-        
+
         // Initialize rotation value
         previousRotation = transform.eulerAngles.z;
     }
@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
             TrackRotation();
         }
     }
-    
+
     void TrackRotation()
     {
         // Only track rotation when in the air
@@ -70,14 +70,14 @@ public class PlayerController : MonoBehaviour
                 totalRotation = 0f;
                 isTrickCompleted = false;
             }
-            
+
             // Calculate the rotation change since last frame
             float currentRotation = transform.eulerAngles.z;
             float deltaRotation = Mathf.DeltaAngle(previousRotation, currentRotation);
-            
+
             // Add to total rotation
             totalRotation += deltaRotation;
-            
+
             // Check if we've completed a 360 (or multiple 360s)
             if (!isTrickCompleted && Mathf.Abs(totalRotation) >= 360f)
             {
@@ -85,7 +85,7 @@ public class PlayerController : MonoBehaviour
                 CompleteRotationTrick();
                 isTrickCompleted = true;
             }
-            
+
             // Save current rotation for next frame
             previousRotation = currentRotation;
         }
@@ -96,12 +96,12 @@ public class PlayerController : MonoBehaviour
             totalRotation = 0f;
         }
     }
-    
+
     void CompleteRotationTrick()
     {
         // How many full 360s did we complete
         int fullRotations = Mathf.FloorToInt(Mathf.Abs(totalRotation) / 360f);
-        
+
         if (fullRotations > 0)
         {
             // Play trick effect
@@ -110,17 +110,17 @@ public class PlayerController : MonoBehaviour
                 trickParticles.Play();
                 audioPlayer.PlayBoostClip();
             }
-            
+
             // Add score through GameManager
             scoreManager.CompleteTrick();
         }
     }
-    
+
     // Get input value and store in jumpInput
     void OnJump(InputValue value)
-    {   
+    {
         myAnimator.SetBool(isJumping, value.isPressed);
-        
+
         // Check if the player is standing on the ground
         if (IsGroundTouching() && value.isPressed)
         {
@@ -130,14 +130,37 @@ public class PlayerController : MonoBehaviour
     }
 
     // If the player head is touching the ground then activate Crash
-    void OnTriggerEnter2D(Collider2D other) 
+    void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.CompareTag("Ground"))
+        if (other.CompareTag("Ground"))
         {
             Crash();
-        }    
+        }
+        else if (other.CompareTag("Water")) // Detect water layer
+        {
+            Debug.Log("Collided with: " + other.gameObject.name);
+            IncreaseSpeed();
+        }
     }
-    
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Water")) // Reset speed when leaving water
+        {
+            ResetSpeed();
+        }
+    }
+
+    void IncreaseSpeed()
+    {
+        rb2d.linearVelocity = new Vector2(rb2d.linearVelocity.x * 2f, rb2d.linearVelocity.y);
+    }
+
+    void ResetSpeed()
+    {
+        rb2d.linearVelocity = new Vector2(rb2d.linearVelocity.x / 2f, rb2d.linearVelocity.y);
+    }
+
     public void Crash()
     {
         if (!canMove) return;
@@ -157,7 +180,7 @@ public class PlayerController : MonoBehaviour
     {
         moveInput = value.Get<Vector2>();
     }
-    
+
     void RotatePlayer()
     {
         if (moveInput.x < 0)
@@ -169,12 +192,12 @@ public class PlayerController : MonoBehaviour
             rb2d.AddTorque(moveInput.x * -torqueAmount);
         }
     }
-    
+
     bool IsGroundTouching()
     {
         return myBoardCollider.IsTouchingLayers(LayerMask.GetMask("Ground"));
     }
-    
+
     void Skating()
     {
         if (IsGroundTouching())
