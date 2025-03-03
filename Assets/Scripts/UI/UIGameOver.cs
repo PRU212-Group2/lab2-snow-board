@@ -3,14 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIGameOver : MonoBehaviour
 {
     private GameManager gameManager;
     private ScoreManager scoreManager;
 
-    public Text gameOverText;
-    public Text scoreText;
+    public TextMeshProUGUI gameOverText;
+    public TextMeshProUGUI scoreText;
     public Button restartButton;
     public Button mainMenuButton;
 
@@ -28,7 +29,7 @@ public class UIGameOver : MonoBehaviour
     {
         gameOverText.text = "Game Over!";
         scoreText.text = "Score: " + scoreManager.GetScore() + "\nHighest Score: " + scoreManager.GetHighScore();
-        scoreText.text = "Distance: " + scoreManager.GetDistanceTraveled() + "\nHighest Score: " + scoreManager.GetFurthestDistanceTraveled();
+        scoreText.text = "\nDistance: " + scoreManager.GetDistanceTraveled() + "\nHighest Distance: " + scoreManager.GetFurthestDistanceTraveled();
         gameOverText.gameObject.SetActive(true);
         scoreText.gameObject.SetActive(true);
         restartButton.gameObject.SetActive(true);
