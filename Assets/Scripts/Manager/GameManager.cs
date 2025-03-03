@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -28,10 +29,7 @@ public class GameManager : MonoBehaviour
     
     void Update()
     {
-        if (gameMode.Equals("Time Trial"))
-        {
-            DecreaseTime();
-        }
+        if (gameMode.Equals("Time Trial")) DecreaseTime();
     }
 
     public void SetGameMode(string mode)
@@ -91,6 +89,14 @@ public class GameManager : MonoBehaviour
         timeLeft = startTime;
         dayNightManager.ResetDayNightCycle();
         scoreManager.ResetScore();
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene("Endless Runner");
+    }
+
+    // Load Main menu scene
+    public void MainMenu()
+    {
+        timeLeft = startTime;
+        scoreManager.ResetScore();
+        SceneManager.LoadScene("MainMenu");
     }
 }
