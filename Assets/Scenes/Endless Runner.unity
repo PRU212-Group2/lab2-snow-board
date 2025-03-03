@@ -208,9 +208,25 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2884654357361419581, guid: 9954145c8ac01904b94e0d51d7829135, type: 3}
+      propertyPath: baseSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2884654357361419581, guid: 9954145c8ac01904b94e0d51d7829135, type: 3}
+      propertyPath: boostSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2884654357361419581, guid: 9954145c8ac01904b94e0d51d7829135, type: 3}
+      propertyPath: boostFactor
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2884654357361419581, guid: 9954145c8ac01904b94e0d51d7829135, type: 3}
       propertyPath: snowParticles
       value: 
       objectReference: {fileID: 2074358103}
+    - target: {fileID: 2884654357361419581, guid: 9954145c8ac01904b94e0d51d7829135, type: 3}
+      propertyPath: accelerationRate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3733664755318185003, guid: 9954145c8ac01904b94e0d51d7829135, type: 3}
       propertyPath: m_Name
       value: Player
