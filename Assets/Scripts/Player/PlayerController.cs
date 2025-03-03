@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,10 +9,12 @@ public class PlayerController : MonoBehaviour
     private static readonly int dyingTrigger = Animator.StringToHash("crashingTrigger");
 
     [SerializeField] float torqueAmount = 1f;
-    [SerializeField] float boostSpeed = 30f;
+    [SerializeField] float boostFactor = 1.1f;
+    [SerializeField] float boostDuration = 2f;
     [SerializeField] float baseSpeed = 20f;
     [SerializeField] float jumpSpeed = 30f;
     [SerializeField] float jumpBoost = 10f;
+    [SerializeField] float accelerationRate = 2f;
     [SerializeField] ParticleSystem crashEffect;
     [SerializeField] ParticleSystem trickParticles;
     [SerializeField] ParticleSystem snowParticles;
@@ -27,10 +30,15 @@ public class PlayerController : MonoBehaviour
     bool canMove = true;
 
     // Rotation tracking
-    private float totalRotation = 0f;
-    private float previousRotation = 0f;
-    private bool isTrackingTrick = false;
-    private bool isTrickCompleted = false;
+    float totalRotation = 0f;
+    float previousRotation = 0f;
+    bool isTrackingTrick = false;
+    bool isTrickCompleted = false;
+    
+    // Handle boost
+    float boostTimer = 0f;
+    bool isBoostActive = false;
+    float currentBoostFactor = 1.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -55,7 +63,7 @@ public class PlayerController : MonoBehaviour
             RotatePlayer();
             Skating();
             TrackRotation();
-            SpeedUp();
+            HandleBoost();
         }
     }
 
@@ -139,18 +147,43 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void SpeedUp()
+    void HandleBoost()
     {
-        if (myBoardCollider.IsTouchingLayers(LayerMask.GetMask("Water")))
+        // Check if we're on water and not already boosting
+        if (myBoardCollider.IsTouchingLayers(LayerMask.GetMask("Water")) && !isBoostActive)
         {
-            // Debug.Log("Collided with: " + other.gameObject.name);
-            IncreaseSpeed();
+            // Start the boost
+            isBoostActive = true;
+            boostTimer = 0f;
+            audioPlayer.PlayBoostClip();  // Optional: play a sound effect
         }
-    }
 
-    void IncreaseSpeed()
-    {
-        rb2d.linearVelocity = new Vector2(rb2d.linearVelocity.x * 1.3f, rb2d.linearVelocity.y);
+        // Handle active boost
+        if (isBoostActive)
+        {
+            boostTimer += Time.deltaTime;
+        
+            if (boostTimer <= boostDuration)
+            {
+                // Boost is active - accelerate
+                currentBoostFactor = Mathf.Lerp(currentBoostFactor, boostFactor, accelerationRate * Time.deltaTime);
+            }
+            else
+            {
+                // Boost duration over - decelerate
+                currentBoostFactor = Mathf.Lerp(currentBoostFactor, 1.0f, accelerationRate * Time.deltaTime);
+            
+                // If we're close enough to normal speed, end the boost
+                if (Mathf.Abs(currentBoostFactor - 1.0f) < 0.05f)
+                {
+                    isBoostActive = false;
+                    currentBoostFactor = 1.0f;
+                }
+            }
+        
+            // Apply the current speed
+            rb2d.linearVelocity = new Vector2(baseSpeed * currentBoostFactor, rb2d.linearVelocity.y);
+        }
     }
 
     public void Crash()
