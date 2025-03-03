@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3894842891945427510
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5076861915723477354}
+  - component: {fileID: 5237320868546446789}
+  m_Layer: 0
+  m_Name: Level Generator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5076861915723477354
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3894842891945427510}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5237320868546446789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3894842891945427510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b62193edc247b242824296c399e71f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chunkPrefabs:
+  - {fileID: 1718404721045760720, guid: 8f3cc36eca8c9de48a5013e319117608, type: 3}
+  - {fileID: 1718404721045760720, guid: 6e39eb94f490f7c449dff02e5fedd56b, type: 3}
+  - {fileID: 1718404721045760720, guid: 0d672897c4a508d4a8807d547b414fc3, type: 3}
+  - {fileID: 1718404721045760720, guid: e0725325780c727418f5bbb1b5ad0b25, type: 3}
+  - {fileID: 1718404721045760720, guid: 0db7f2f7607bae04b8ab5adcbd0c0ed9, type: 3}
+  - {fileID: 1718404721045760720, guid: f43005201d4e38447b85f1cf732416e1, type: 3}
+  - {fileID: 1718404721045760720, guid: 5d5ad248c4ba6cd489d0c30a4b9dc83c, type: 3}
+  - {fileID: 1718404721045760720, guid: 123d899221aab8a4db193875b689eca8, type: 3}
+  - {fileID: 1718404721045760720, guid: 22789d82245bc094383e66be860efafb, type: 3}
+  - {fileID: 1718404721045760720, guid: 939c45c8a891fbd44ae62c8f353ba950, type: 3}
+  - {fileID: 1718404721045760720, guid: eed836ccf6524e64498e9cdd20a06e25, type: 3}
+  - {fileID: 1718404721045760720, guid: 4c126a426bb90a3449faac9c57607d47, type: 3}
+  - {fileID: 1718404721045760720, guid: bfae42bca9e4d9545841b6c03d385c01, type: 3}
+  chunkParent: {fileID: 5670715899949103413, guid: 44975fa10cef0ff4bbf673cf5330ccd1, type: 3}
+  checkpointChunkPrefab: {fileID: 1718404721045760720, guid: 1bf30e9d2c29a574985cd980ff2b4d49, type: 3}
+  chunkAmount: 2
+  checkpointChunkInterval: 2
+  chunkLength: 200
+  moveSpeed: 3
+  minMoveSpeed: 2
+  maxMoveSpeed: 10
