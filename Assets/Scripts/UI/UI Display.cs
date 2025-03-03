@@ -17,7 +17,7 @@ public class UIDisplay : MonoBehaviour
     private GameManager gameManager;
     private bool isTimeTrialMode = false;
 
-    void Awake()
+    void Start()
     {
         scoreManager = FindFirstObjectByType<ScoreManager>();
         gameManager = FindFirstObjectByType<GameManager>();
@@ -33,10 +33,7 @@ public class UIDisplay : MonoBehaviour
             scoreIndicatorParent.offsetMin = Vector2.zero;
             scoreIndicatorParent.offsetMax = Vector2.zero;
         }
-    }
-
-    void Start()
-    {
+        
         CheckGameMode();
     }
     

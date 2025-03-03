@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -28,10 +29,12 @@ public class GameManager : MonoBehaviour
     
     void Update()
     {
-        if (gameMode.Equals("Time Trial"))
-        {
-            DecreaseTime();
-        }
+        if (gameMode.Equals("Time Trial")) DecreaseTime();
+    }
+
+    public void SetGameMode(string mode)
+    {
+        gameMode = mode;
     }
     
     public void IncreaseTime(float amount)
@@ -45,7 +48,7 @@ public class GameManager : MonoBehaviour
 
         if (timeLeft <= 0f)
         {
-            Invoke("ResetGame", loadDelay);
+            GameOver();
         }
     }
 
@@ -74,18 +77,39 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    // Either reset the current level or the whole game session
+    // Switch to game over scene
     public void ProcessPlayerCrash()
     {
-        Invoke("ResetGame", loadDelay);
+        Invoke("GameOver", loadDelay);
     }
     
     // Reset game session to the first level
-    void ResetGame()
+    public void ResetGame()
     {
         timeLeft = startTime;
         dayNightManager.ResetDayNightCycle();
         scoreManager.ResetScore();
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene("EndlessRunner");
+    }
+
+    // Load Main menu scene
+    public void MainMenu()
+    {
+        timeLeft = startTime;
+        scoreManager.ResetScore();
+        SceneManager.LoadScene("MainMenu");
+    }
+    
+    // Load Game over scene
+    public void GameOver()
+    {
+        timeLeft = startTime;
+        SceneManager.LoadScene("GameOver");
+    }
+    
+    // Load Game over scene
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }
