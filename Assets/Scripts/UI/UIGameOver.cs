@@ -1,56 +1,39 @@
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UIGameOver : MonoBehaviour
 {
-    private GameManager gameManager;
-    private ScoreManager scoreManager;
+    [SerializeField] TextMeshProUGUI scoreText;
+    [SerializeField] TextMeshProUGUI highScoreText;
+    [SerializeField] TextMeshProUGUI distanceText;
+    [SerializeField] TextMeshProUGUI furthestDistanceText;
 
-    public TextMeshProUGUI gameOverText;
-    public TextMeshProUGUI scoreText;
-    public Button restartButton;
-    public Button mainMenuButton;
+    ScoreManager scoreManager;
+    GameManager gameManager; 
 
-    public void Awake()
+    void Start()
     {
-        gameManager = FindFirstObjectByType<GameManager>();
         scoreManager = FindFirstObjectByType<ScoreManager>();
-
-        restartButton.onClick.AddListener(RestartGame);
-        mainMenuButton.onClick.AddListener(GoToMainMenu);
+        gameManager = FindFirstObjectByType<GameManager>();
+        scoreText.text = scoreManager.GetScore().ToString("0000000");
+        highScoreText.text = scoreManager.GetHighScore().ToString("0000000");
+        distanceText.text = scoreManager.GetDistanceTraveled().ToString("0000000");
+        furthestDistanceText.text = scoreManager.GetFurthestDistanceTraveled().ToString("0000000");
+    }
+    
+    public void OnRestartPressed()
+    {
+        gameManager.ResetGame();
     }
 
-
-    public void GameOver()
+    public void OnMainMenuPressed()
     {
-        gameOverText.text = "Game Over!";
-        scoreText.text = "Score: " + scoreManager.GetScore() + "\nHighest Score: " + scoreManager.GetHighScore();
-        scoreText.text = "\nDistance: " + scoreManager.GetDistanceTraveled() + "\nHighest Distance: " + scoreManager.GetFurthestDistanceTraveled();
-        gameOverText.gameObject.SetActive(true);
-        scoreText.gameObject.SetActive(true);
-        restartButton.gameObject.SetActive(true);
-        mainMenuButton.gameObject.SetActive(true);
+        gameManager.MainMenu();
     }
-
-    public void RestartGame()
+    
+    public void OnQuitPressed()
     {
-        var mode = gameManager.GetGameMode();
-        if (mode == "Normal")
-        {
-            SceneManager.LoadScene("Normal");
-        }
-        else
-        {
-            SceneManager.LoadScene("Time Trial");
-        }
-    }
-
-    public void GoToMainMenu()
-    {
-        SceneManager.LoadScene("MainMenu");
+        gameManager.QuitGame();
     }
 }

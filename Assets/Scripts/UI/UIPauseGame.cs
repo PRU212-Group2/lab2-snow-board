@@ -4,7 +4,6 @@ public class UIPauseGame : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenu;
     
-    bool isPaused = false;
     float previousTimeScale = 1;
     GameManager gameManager;
 

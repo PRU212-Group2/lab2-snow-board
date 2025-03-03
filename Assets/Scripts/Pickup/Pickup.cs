@@ -17,8 +17,16 @@ public class Pickup : MonoBehaviour
 
     void Update()
     {
-        
+        // Get current rotation
+        Vector3 currentRotation = transform.eulerAngles;
+
+        // Increment the Y-axis rotation
+        currentRotation.y += 90 * Time.deltaTime;
+
+        // Apply the new rotation
+        transform.eulerAngles = currentRotation;
     }
+
     
     void OnTriggerEnter2D(Collider2D other)
     {

@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
 
         if (timeLeft <= 0f)
         {
-            Invoke("ResetGame", loadDelay);
+            GameOver();
         }
     }
 
@@ -77,10 +77,10 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    // Either reset the current level or the whole game session
+    // Switch to game over scene
     public void ProcessPlayerCrash()
     {
-        Invoke("ResetGame", loadDelay);
+        Invoke("GameOver", loadDelay);
     }
     
     // Reset game session to the first level
@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
         timeLeft = startTime;
         dayNightManager.ResetDayNightCycle();
         scoreManager.ResetScore();
-        SceneManager.LoadScene("Endless Runner");
+        SceneManager.LoadScene("EndlessRunner");
     }
 
     // Load Main menu scene
@@ -98,5 +98,18 @@ public class GameManager : MonoBehaviour
         timeLeft = startTime;
         scoreManager.ResetScore();
         SceneManager.LoadScene("MainMenu");
+    }
+    
+    // Load Game over scene
+    public void GameOver()
+    {
+        timeLeft = startTime;
+        SceneManager.LoadScene("GameOver");
+    }
+    
+    // Load Game over scene
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }

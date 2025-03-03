@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float torqueAmount = 1f;
     [SerializeField] float boostFactor = 1.1f;
     [SerializeField] float boostDuration = 2f;
+    [SerializeField] int boostBonus = 100;
     [SerializeField] float baseSpeed = 20f;
     [SerializeField] float jumpSpeed = 30f;
     [SerializeField] float jumpBoost = 10f;
@@ -155,6 +156,7 @@ public class PlayerController : MonoBehaviour
             // Start the boost
             isBoostActive = true;
             boostTimer = 0f;
+            scoreManager.AddScoreWithIndicator(boostBonus, "Slide on ice");
             audioPlayer.PlayBoostClip();  // Optional: play a sound effect
         }
 
