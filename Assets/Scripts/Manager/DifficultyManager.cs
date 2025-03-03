@@ -1,9 +1,10 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class DifficultyManager : MonoBehaviour
 {
-    [SerializeField] int startingDifficultyScoreThreshold = 1000;
-    [SerializeField] int scoreThresholdIncreaseAmount = 1000;
+    [SerializeField] int startingDifficultyDistanceThreshold = 1000;
+    [SerializeField] int distanceThresholdIncreaseAmount = 1000;
     [SerializeField] float chunkMoveSpeedIncreaseAmount = 1f;
 
     [SerializeField] float fogDensityIncreaseAmount = 0.005f;
@@ -30,19 +31,19 @@ public class DifficultyManager : MonoBehaviour
 
     private void CheckDifficultyThreshold()
     {
-        int score = scoreManager.GetScore();
+        int distanceTraveled = scoreManager.GetDistanceTraveled();
 
-        if (score >= startingDifficultyScoreThreshold)
+        if (distanceTraveled >= startingDifficultyDistanceThreshold)
         {
             ChangeDifficulty();
-            startingDifficultyScoreThreshold += scoreThresholdIncreaseAmount;
+            startingDifficultyDistanceThreshold += distanceThresholdIncreaseAmount;
         }
 
         // Check if fog intensity needs to increase
-        if (score >= fogScoreThreshold)
+        if (distanceTraveled >= fogScoreThreshold)
         {
             IncreaseFogDensity();
-            fogScoreThreshold += scoreThresholdIncreaseAmount;
+            fogScoreThreshold += distanceThresholdIncreaseAmount;
         }
     }
 

@@ -117,7 +117,7 @@ public class AudioPlayer : MonoBehaviour
     
     public void PlayBoostClip()
     {
-        PlayClip(boostClip, crashVolume);
+        PlayClip(boostClip, boostVolume);
     }
     
     public void PlayPickupClip()
