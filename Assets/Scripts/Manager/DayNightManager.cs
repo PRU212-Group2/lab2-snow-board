@@ -49,7 +49,7 @@ public class DayNightManager : MonoBehaviour
         if (globalLight == null)
         {
             // Try to find a global light in the scene
-            Light2D[] lights = FindObjectsOfType<Light2D>();
+            Light2D[] lights = FindObjectsByType<Light2D>(FindObjectsSortMode.None);
             foreach (Light2D light in lights)
             {
                 // Look for a global light with the highest intensity

@@ -52,6 +52,9 @@ TagManager:
   - name: Water
     uniqueID: 2887999195
     locked: 0
+  - name: Pickup
+    uniqueID: 2195312629
+    locked: 0
   - name: Foreground
     uniqueID: 3837696603
     locked: 0
