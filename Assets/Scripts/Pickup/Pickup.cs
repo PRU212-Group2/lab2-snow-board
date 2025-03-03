@@ -33,9 +33,10 @@ public class Pickup : MonoBehaviour
         // If player collides then triggers effects
         if (other.CompareTag("Player"))
         {
-            Instantiate(pickupParticle, transform.position, Quaternion.identity);
+            ParticleSystem particles = Instantiate(pickupParticle, transform.position, Quaternion.identity);
             audioPlayer.PlayPickupClip();
             scoreManager.AddScore(pickupPoint);
+            Destroy(particles.gameObject, particles.main.duration);
             Destroy(gameObject);
         }
     }

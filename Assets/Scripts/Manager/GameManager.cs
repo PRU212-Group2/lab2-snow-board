@@ -91,6 +91,15 @@ public class GameManager : MonoBehaviour
         scoreManager.ResetScore();
         SceneManager.LoadScene("EndlessRunner");
     }
+    
+    // Load help menu scene
+    public void HelpMenu()
+    {
+        timeLeft = startTime;
+        dayNightManager.ResetDayNightCycle();
+        scoreManager.ResetScore();
+        SceneManager.LoadScene("HelpMenu");
+    }
 
     // Load Main menu scene
     public void MainMenu()

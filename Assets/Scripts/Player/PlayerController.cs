@@ -11,7 +11,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float torqueAmount = 1f;
     [SerializeField] float boostFactor = 1.1f;
     [SerializeField] float boostDuration = 2f;
-    [SerializeField] int boostBonus = 100;
+    [SerializeField] int boostDistanceBonus = 30;
+    [SerializeField] int boostScoreBonus = 100;
     [SerializeField] float baseSpeed = 20f;
     [SerializeField] float jumpSpeed = 30f;
     [SerializeField] float jumpBoost = 10f;
@@ -29,6 +30,7 @@ public class PlayerController : MonoBehaviour
     ScoreManager scoreManager;
     AudioPlayer audioPlayer;
     bool canMove = true;
+    bool wasGroundTouching = false;
 
     // Rotation tracking
     float totalRotation = 0f;
@@ -156,7 +158,8 @@ public class PlayerController : MonoBehaviour
             // Start the boost
             isBoostActive = true;
             boostTimer = 0f;
-            scoreManager.AddScoreWithIndicator(boostBonus, "Slide on ice");
+            scoreManager.AddDistance(boostDistanceBonus);
+            scoreManager.AddScoreWithIndicator(boostScoreBonus, "Slide on ice");
             audioPlayer.PlayBoostClip();  // Optional: play a sound effect
         }
 
@@ -227,15 +230,23 @@ public class PlayerController : MonoBehaviour
 
     void Skating()
     {
-        if (IsGroundTouching())
+        bool isGroundTouching = IsGroundTouching();
+    
+        // Only change state when there's a transition
+        if (isGroundTouching && !wasGroundTouching)
         {
+            // Just touched ground
             audioPlayer.StartSnowboardingSound();
             snowParticles.Play();
         }
-        else
+        else if (!isGroundTouching && wasGroundTouching)
         {
+            // Just left ground
             audioPlayer.StopSnowboardingSound();
             snowParticles.Stop();
         }
+    
+        // Update previous state
+        wasGroundTouching = isGroundTouching;
     }
 }

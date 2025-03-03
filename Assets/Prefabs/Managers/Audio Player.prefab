@@ -54,8 +54,8 @@ MonoBehaviour:
   pickupClip: {fileID: 0}
   pickupVolume: 1
   songs:
-  - {fileID: 8300000, guid: acfab4e727e505e4583cf03050bf0772, type: 3}
   - {fileID: 8300000, guid: 644d2cab0dfe4f74180ab4d0977667a2, type: 3}
+  - {fileID: 8300000, guid: acfab4e727e505e4583cf03050bf0772, type: 3}
   songVolume: 1
 --- !u!82 &6521915757955981761
 AudioSource:

@@ -29,6 +29,11 @@ public class UIMainMenu : MonoBehaviour
         gameManager.ResetGame();
     }
     
+    public void OnHelpPressed()
+    {
+        gameManager.HelpMenu();
+    }
+    
     public void OnQuitPressed()
     {
         gameManager.QuitGame();
